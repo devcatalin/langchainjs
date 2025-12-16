@@ -20,13 +20,13 @@ Shows how to create agent instances per request when tools cannot be known at st
 - Complete isolation between tenants
 - Tools loaded from external sources
 
-### 3. `semantic-filtering.ts` - Advanced Filtering
-Uses semantic similarity to select the most relevant tools from a large catalog.
+### 3. `mcp-tools-example.ts` - MCP Integration
+Demonstrates how to handle Model Context Protocol (MCP) tools in multi-tenant scenarios.
 
 **Best for:**
-- Large tool catalogs (50+ tools)
-- Context-aware tool selection
-- Optimizing token usage
+- MCP server integration
+- External tool loading
+- Organization-specific tool sets
 
 ## Key Principles
 
@@ -45,5 +45,5 @@ pnpm install
 # Run individual examples
 npx tsx examples/src/createAgent/multiTenant/superset-filtering.ts
 npx tsx examples/src/createAgent/multiTenant/per-request-agent.ts
-npx tsx examples/src/createAgent/multiTenant/semantic-filtering.ts
+npx tsx examples/src/createAgent/multiTenant/mcp-tools-example.ts
 ```
