@@ -252,8 +252,63 @@ Recent additions:
 
 ---
 
-## See Full Document
+---
+
+### Q11: Does context propagate to subagents?
+
+**NO ❌** - Context does NOT automatically propagate.
+
+You must explicitly forward the `config` parameter:
+
+```typescript
+// ❌ Bad: Context lost
+const subagentTool = tool(
+  async ({ task }) => {
+    return await subagent.invoke({ messages: [...] });
+  },
+  { /* ... */ }
+);
+
+// ✅ Good: Context forwarded
+const subagentTool = tool(
+  async ({ task }, config) => {  // Accept config
+    return await subagent.invoke(
+      { messages: [...] },
+      config  // Forward config
+    );
+  },
+  { /* ... */ }
+);
+```
+
+**Access parent state:**
+
+```typescript
+import { getCurrentTaskInput } from "@langchain/langgraph";
+
+const subagentTool = tool(
+  async ({ task }, config) => {
+    // Get parent agent's messages
+    const parentState = getCurrentTaskInput<BuiltInState>(config);
+    const parentMessages = parentState.messages;
+    
+    // Use parent context in subagent
+    const result = await subagent.invoke(
+      { messages: [...] },
+      config  // Forward config with context
+    );
+    return result.messages.at(-1)?.content;
+  },
+  { /* ... */ }
+);
+```
+
+---
+
+## See Full Documents
 
 For complete details, code samples, and in-depth analysis:
 
-👉 **[RESEARCH_CREATEAGENT_API.md](./RESEARCH_CREATEAGENT_API.md)**
+👉 **[RESEARCH_CREATEAGENT_API.md](./RESEARCH_CREATEAGENT_API.md)** - Complete createAgent API documentation
+
+👉 **[RESEARCH_CONTEXT_PROPAGATION.md](./RESEARCH_CONTEXT_PROPAGATION.md)** - Context propagation in nested agents
